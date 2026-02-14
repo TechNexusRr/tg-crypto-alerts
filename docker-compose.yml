@@ -1,0 +1,16 @@
+services:
+  bot:
+    build: .
+    container_name: tg-crypto-alerts
+    restart: unless-stopped
+    environment:
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - TELEGRAM_ADMIN_CHAT_ID=${TELEGRAM_ADMIN_CHAT_ID}
+      - DB_PATH=/app/data/alerts.db
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+    volumes:
+      - bot-data:/app/data
+    mem_limit: 256m
+
+volumes:
+  bot-data:
