@@ -59,12 +59,11 @@ function onPrice(update: PriceUpdate): void {
         alert.data = newData;
 
         // Send notification
-        const dir = result.direction === "up" ? "UP" : "DOWN";
+        const dir = result.direction === "up" ? "🟢 ↑" : "🔴 ↓";
         const msg =
-          `${data.symbol} moved ${dir} $${data.moveAmount}\n` +
+          `${dir} ${data.symbol} moved $${data.moveAmount}\n` +
           `Price: $${formatPrice(update.price)}\n` +
-          `Previous anchor: $${formatPrice(prevAnchor)}\n` +
-          `New anchor: $${formatPrice(update.price)}`;
+          `Previous anchor: $${formatPrice(prevAnchor)}`;
 
         // Look up user chatId
         const user = db.select().from(users).where(eq(users.id, alert.userId)).get();
