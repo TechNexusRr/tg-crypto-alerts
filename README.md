@@ -1,11 +1,11 @@
 # tg-crypto-alerts
 
-Telegram bot that monitors crypto prices in real-time via Binance and Bybit WebSocket feeds and sends configurable movement alerts.
+Telegram bot that monitors crypto prices in real-time via the Binance WebSocket feed and sends configurable movement alerts.
 
 ## Features
 
 - **Price Movement Alerts** — get notified when a symbol moves by a fixed dollar amount (e.g. `/alert ETH 10`). Re-anchors after each trigger so you stay informed on continued moves.
-- **Dual Price Feeds** — Binance USDT-M Futures + Bybit v5 Linear perpetuals, 10 symbols
+- **Price Feed** — Binance USDT-M Futures, 25 symbols (21 crypto + gold, silver, Tesla, Nvidia via TradFi perpetuals)
 - **Alert Management** — list, edit, and drop alerts (`/list`, `/edit`, `/drop`)
 - **Symbol Search** — find available trading pairs (`/symbols btc`)
 - **System Health** — check feed status, uptime, and prices (`/status`)
@@ -62,6 +62,10 @@ npm start
 
 ## Tracked Symbols
 
-Currently hardcoded to 10 USDT perpetual pairs:
+Currently hardcoded to 24 Binance USDT-M perpetuals.
 
-BTC, ETH, SOL, BNB, XRP, DOGE, ADA, AVAX, LINK, PEPE
+**Crypto (21):** BTC, ETH, SOL, BNB, XRP, DOGE, ADA, AVAX, LINK, DOT, TRX, TON, LTC, BCH, NEAR, ATOM, UNI, APT, ARB, OP, RIF
+
+**TradFi (4):** XAU (gold), XAG (silver), TSLA (Tesla), NVDA (Nvidia)
+
+TradFi symbols use Binance's `TRADIFI_PERPETUAL` contracts and track the underlying asset ~1:1. Stock feeds (TSLA, NVDA) only stream during market hours, so alerts on them are silent nights/weekends.

@@ -7,38 +7,30 @@ import { formatPrice } from "../formatters.ts";
 interface StatusDeps {
   priceBus: PriceBus;
   getBinanceHealth: () => FeedHealth;
-  getBybitHealth: () => FeedHealth;
   startedAt: number;
 }
 
 export function statusCommand(deps: StatusDeps) {
   return (ctx: Context) => {
-    const { priceBus, getBinanceHealth, getBybitHealth, startedAt } = deps;
+    const { priceBus, getBinanceHealth, startedAt } = deps;
 
     const uptimeMs = Date.now() - startedAt;
     const uptime = formatUptime(uptimeMs);
 
     const binanceHealth = getBinanceHealth();
-    const bybitHealth = getBybitHealth();
 
     let msg = `System Status\n\n`;
     msg += `Uptime: ${uptime}\n\n`;
 
     // Feed health
     msg += formatFeedHealth("Binance", binanceHealth);
-    msg += formatFeedHealth("Bybit", bybitHealth);
 
-    // BTC prices from each source
+    // BTC price
     const binanceBtc = priceBus.getLastPriceBySource("BTCUSDT", "binance");
-    const bybitBtc = priceBus.getLastPriceBySource("BTCUSDT", "bybit");
 
     msg += "\n";
-    if (binanceBtc || bybitBtc) {
-      msg += "BTC: ";
-      const parts: string[] = [];
-      if (binanceBtc) parts.push(`$${formatPrice(binanceBtc.price)} (Binance)`);
-      if (bybitBtc) parts.push(`$${formatPrice(bybitBtc.price)} (Bybit)`);
-      msg += parts.join(" / ") + "\n";
+    if (binanceBtc) {
+      msg += `BTC: $${formatPrice(binanceBtc.price)} (Binance)\n`;
     } else {
       msg += "BTC: waiting for data...\n";
     }

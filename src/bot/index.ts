@@ -16,7 +16,6 @@ const startedAt = Date.now();
 interface BotDeps {
   priceBus: PriceBus;
   getBinanceHealth: () => FeedHealth;
-  getBybitHealth: () => FeedHealth;
 }
 
 export async function startBot(deps: BotDeps): Promise<{ stop: () => Promise<void> }> {
@@ -51,7 +50,6 @@ export async function startBot(deps: BotDeps): Promise<{ stop: () => Promise<voi
   bot.command("status", statusCommand({
     priceBus,
     getBinanceHealth: deps.getBinanceHealth,
-    getBybitHealth: deps.getBybitHealth,
     startedAt,
   }));
 

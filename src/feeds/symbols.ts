@@ -1,26 +1,34 @@
-// Hardcoded symbol list — scoped to 10 popular USDT perpetuals for now.
+// Hardcoded symbol list — 20 popular Binance USDT-M perpetuals.
 // Future: dynamically subscribe to symbols that have active alerts.
 export const WATCHED_SYMBOLS = [
+  // Majors
   "BTCUSDT",
   "ETHUSDT",
   "SOLUSDT",
   "BNBUSDT",
   "XRPUSDT",
+  // Large-cap alts
   "DOGEUSDT",
   "ADAUSDT",
   "AVAXUSDT",
   "LINKUSDT",
-  "PEPEUSDT",
-  "XAUTUSDT",
+  "DOTUSDT",
+  "TRXUSDT",
+  "TONUSDT",
+  "LTCUSDT",
+  "BCHUSDT",
+  "NEARUSDT",
+  "ATOMUSDT",
+  "UNIUSDT",
+  "APTUSDT",
+  "ARBUSDT",
+  "OPUSDT",
+  "RIFUSDT", // special request — low unit price (~$0.10), use small move amounts
+  // TradFi perpetuals (Binance TRADIFI_PERPETUAL contracts).
+  // Prices track the real-world asset ~1:1, so $-move alerts map to real dollars.
+  // Note: stocks trade on market hours, so these feeds go quiet nights/weekends.
+  "XAUUSDT", // Gold (per oz)
+  "XAGUSDT", // Silver (per oz)
+  "TSLAUSDT", // Tesla
+  "NVDAUSDT", // Nvidia
 ];
-
-// Bybit uses different symbol names for some perpetuals.
-// Map our canonical symbol → Bybit linear symbol.
-export const BYBIT_SYMBOL_MAP: Record<string, string> = {
-  PEPEUSDT: "1000PEPEUSDT",
-};
-
-// Reverse map: Bybit symbol → our canonical symbol
-export const BYBIT_SYMBOL_REVERSE: Record<string, string> = Object.fromEntries(
-  Object.entries(BYBIT_SYMBOL_MAP).map(([k, v]) => [v, k]),
-);
