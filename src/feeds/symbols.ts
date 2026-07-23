@@ -24,11 +24,11 @@ export const WATCHED_SYMBOLS = [
   "ARBUSDT",
   "OPUSDT",
   "RIFUSDT", // special request — low unit price (~$0.10), use small move amounts
-  // TradFi perpetuals (Binance TRADIFI_PERPETUAL contracts).
-  // Prices track the real-world asset ~1:1, so $-move alerts map to real dollars.
-  // Note: stocks trade on market hours, so these feeds go quiet nights/weekends.
-  "XAUUSDT", // Gold (per oz)
-  "XAGUSDT", // Silver (per oz)
-  "TSLAUSDT", // Tesla
-  "NVDAUSDT", // Nvidia
+  // TradFi symbols (gold, silver, Tesla, Nvidia) are Binance FUTURES-only
+  // (TRADIFI_PERPETUAL contracts). The feed here uses Binance's SPOT public data
+  // domain (data-stream.binance.vision) because this host's IP is blocked from
+  // Binance's futures/main WS. Spot carries no stock/metal symbols, so these are
+  // disabled. Re-enable ONLY if the feed can reach Binance futures again
+  // (e.g. a proxy/VPN egress on the host) — otherwise they produce no data.
+  // "XAUUSDT", "XAGUSDT", "TSLAUSDT", "NVDAUSDT",
 ];

@@ -3,9 +3,13 @@ import { retry } from "../utils/retry.ts";
 import type { PriceUpdate, FeedHealth } from "./types.ts";
 import { WATCHED_SYMBOLS } from "./symbols.ts";
 
-// Binance USDT-M Futures combined stream
+// Binance SPOT public market-data stream.
+// Uses the data-only domain (data-stream.binance.vision), NOT fstream.binance.com
+// (futures) or stream.binance.com (spot main): this host's IP is geo/IP-blocked from
+// Binance's main + futures WS (the handshake is rejected with a non-101 status), but
+// the public data domain is reachable. Spot miniTicker has the same {s,c} payload.
 const streams = WATCHED_SYMBOLS.map((s) => `${s.toLowerCase()}@miniTicker`).join("/");
-const BINANCE_WS_URL = `wss://fstream.binance.com/stream?streams=${streams}`;
+const BINANCE_WS_URL = `wss://data-stream.binance.vision/stream?streams=${streams}`;
 
 interface BinanceMiniTicker {
   s: string; // symbol
@@ -26,7 +30,7 @@ export function startBinanceFeed(
 
     ws.addEventListener("open", () => {
       connected = true;
-      logger.info({ symbols: WATCHED_SYMBOLS.length }, "Binance Futures WS connected");
+      logger.info({ symbols: WATCHED_SYMBOLS.length }, "Binance spot WS connected");
     });
 
     ws.addEventListener("message", (event) => {

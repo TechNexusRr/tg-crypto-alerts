@@ -5,7 +5,7 @@ Telegram bot that monitors crypto prices in real-time via the Binance WebSocket 
 ## Features
 
 - **Price Movement Alerts** — get notified when a symbol moves by a fixed dollar amount (e.g. `/alert ETH 10`). Re-anchors after each trigger so you stay informed on continued moves.
-- **Price Feed** — Binance USDT-M Futures, 25 symbols (21 crypto + gold, silver, Tesla, Nvidia via TradFi perpetuals)
+- **Price Feed** — Binance spot public data stream (`data-stream.binance.vision`), 21 crypto symbols
 - **Alert Management** — list, edit, and drop alerts (`/list`, `/edit`, `/drop`)
 - **Symbol Search** — find available trading pairs (`/symbols btc`)
 - **System Health** — check feed status, uptime, and prices (`/status`)
@@ -62,10 +62,12 @@ npm start
 
 ## Tracked Symbols
 
-Currently hardcoded to 24 Binance USDT-M perpetuals.
+Currently hardcoded to 21 Binance spot pairs:
 
-**Crypto (21):** BTC, ETH, SOL, BNB, XRP, DOGE, ADA, AVAX, LINK, DOT, TRX, TON, LTC, BCH, NEAR, ATOM, UNI, APT, ARB, OP, RIF
+BTC, ETH, SOL, BNB, XRP, DOGE, ADA, AVAX, LINK, DOT, TRX, TON, LTC, BCH, NEAR, ATOM, UNI, APT, ARB, OP, RIF
 
-**TradFi (4):** XAU (gold), XAG (silver), TSLA (Tesla), NVDA (Nvidia)
+### Feed endpoint & the TradFi limitation
 
-TradFi symbols use Binance's `TRADIFI_PERPETUAL` contracts and track the underlying asset ~1:1. Stock feeds (TSLA, NVDA) only stream during market hours, so alerts on them are silent nights/weekends.
+The feed connects to Binance's **public spot data domain**, `data-stream.binance.vision`, rather than `fstream.binance.com` (futures) or `stream.binance.com` (spot main). On this deployment's host, Binance's main and futures WebSockets reject the connection at the handshake (non-101 status) — an IP/geo block on datacenter ranges — while the public data domain stays reachable.
+
+Because that domain serves **spot** only, Binance's TradFi perpetuals (gold `XAUUSDT`, silver `XAGUSDT`, Tesla `TSLAUSDT`, Nvidia `NVDAUSDT`) are **not available** here — they exist only as `TRADIFI_PERPETUAL` futures contracts. They're left commented out in `src/feeds/symbols.ts`; re-enable them only if the host can reach Binance futures again (e.g. via a proxy/VPN egress).
